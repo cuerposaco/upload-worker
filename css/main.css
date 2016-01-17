@@ -1,0 +1,122 @@
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body {
+    font: 12pt "Arial";
+}
+
+input#fileInput {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+}
+
+div#drop_zone {
+    /* margin: 0.7em auto; */
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: #f2f2f2;
+    padding: 1em;
+    font-size: 3em;
+    color: #c3c3c3;
+    border-radius: 4px;
+    border: 0.11em dashed #c3c3c3;
+    font-weight: 100;
+    font-family: "Helvetica";
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    box-shadow: inset  0px 0px 2em rgba(0,0,0,0.3);
+}
+
+div#drop_zone label {
+    display: table;
+    background: #C5C5C5;
+    color: white;
+    border-radius: 4px;
+    font-size: 0.5em;
+    padding: 0.5em;
+    line-height: 1em;
+    cursor: pointer;
+    margin: 0.7em auto;
+    width: auto;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+ul#file_list {
+    padding: 0.7em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: block;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+
+}
+
+#file_list li {
+    padding: 0.7em;
+    list-style:none;
+    display:block;
+    background-color: #f2f2f2;
+    margin-bottom: 0.3em;
+    color: #000;
+    text-align: left;
+    position: relative;
+    outline: 1px solid rgba(0,0,0,.1);
+    transition: all 300ms 0s;
+    animation: fade-in 300ms 0s;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    overflow: hidden;
+}
+
+#file_list li > .progress {
+    display:block;
+    background-color: rgba(255, 0, 104, 0.61);
+    text-align:center;
+    line-height: 0.2em;
+    overflow: hidden;
+    text-indent: -1000%;
+    margin-top: 0.5em;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: all 200ms 0s;
+}
+
+#file_list li.complete {
+    color: white;
+    transition-delay: 500ms;
+}
+
+#file_list li.complete:after {
+    content: 'OK';
+    display: block;
+    float: right;
+    text-align: right;
+    padding-left: 1em;
+    border-left: 1px solid rgba(0,0,0,0.1);
+    margin-left: 1em;
+}
+
+#file_list li.complete .progress {
+    background-color: #8AB53C;
+    line-height: 3em;
+    z-index: -1;
+    transition-delay: 500ms;
+}
+
+@keyframes fade-in{
+    0%{ opacity: 0; top: 1em; }
+    100%{ top: 0em; }
+}
