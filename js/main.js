@@ -36,7 +36,7 @@
 
 		// FileItem Element
 		var li = document.createElement('li');
-		li.innerHTML = _file.name + ' (' + getReadableFileSizeString( _file.size ) + ')';
+		li.innerHTML = _file.name + ' (' + getBytesWithUnit( _file.size, true, 2, true ) + ')';
 
 		// progress Element
 		var progressEl = document.createElement('div');
@@ -90,16 +90,37 @@
 		};
 	}
 
-	function getReadableFileSizeString(fileSizeInBytes) {
-
-	    var i = -1;
-	    var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
-	    do {
-	        fileSizeInBytes = fileSizeInBytes / 1024;
-	        i++;
-	    } while (fileSizeInBytes > 1024);
-
-	    return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+	// # http://bateru.com/news/2012/03/code-of-the-day-converts-bytes-to-unit/
+	// other ways to do:
+	// - http://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
+	
+	// function: getBytesWithUnit
+	// input: bytes (number)
+	// input: useSI (boolean), if true then uses SI standard (1KB = 1000bytes), otherwise uses IEC (1KiB = 1024 bytes)
+	// input: precision (number), sets the maximum length of decimal places.
+	// input: useSISuffix (boolean), if true forces the suffix to be in SI standard. Useful if you want 1KB = 1024 bytes
+	// returns (string), represents bytes is the most simplified form.
+	var getBytesWithUnit = function (bytes, useSI, precision, useSISuffix) {
+		"use strict";
+		if (!(!isNaN(bytes) && +bytes > -1 && isFinite(bytes))) {
+			return false;
+		}
+		var units, obj,	amountOfUnits, unitSelected, suffix;
+		units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+		obj = {
+			base : useSI ? 10 : 2,
+			unitDegreeDiff : useSI ? 3 : 10
+		};
+		amountOfUnits = Math.max(0, Math.floor(Math.round(Math.log(+bytes) / Math.log(obj.base) * 1e6) / 1e6));
+		unitSelected = Math.floor(amountOfUnits / obj.unitDegreeDiff);
+		unitSelected = units.length > unitSelected ? unitSelected : units.length - 1;
+		suffix = (useSI || useSISuffix) ? units[unitSelected] : units[unitSelected].replace('B', 'iB');
+		bytes = +bytes / Math.pow(obj.base, obj.unitDegreeDiff * unitSelected);
+		precision = precision || 3;
+		if (bytes.toString().length > bytes.toFixed(precision).toString().length) {
+			bytes = bytes.toFixed(precision);
+		}
+		return bytes + " " + suffix;
 	};
 
 })();
