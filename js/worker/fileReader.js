@@ -11,6 +11,9 @@ var actions = {
 	"file" : onFileSlice
 }
 
+// @funtion onFileSlice
+// onFileSlice - create slice parts from file to send async or 
+// whatever to do with this parts of the file
 function onFileSlice(data){
 	var file = data;
 	
@@ -20,6 +23,7 @@ function onFileSlice(data){
 	var start = 0;
 	var end = start + CHUNK_SIZE;
 
+	// async process
 	processRecursive(function complete() {
 		self.postMessage({ 
 			cmd: 'complete', 
@@ -34,20 +38,8 @@ function onFileSlice(data){
 	});
 	return;
 
-	while( start < TOTAL_SIZE ){
-		
-		var chunk = file.slice( start, end );
-		
-		process( chunk, start, TOTAL_SIZE );
-
-		start = end;
-		end = start + CHUNK_SIZE;
-		// prevent bytes overflow
-		if (end > TOTAL_SIZE) { end = TOTAL_SIZE; }
-	}
-
 	function processRecursive( cb ){
-		console.log('recursive');
+		//console.log('recursive');
 		if( start < TOTAL_SIZE ){
 			var chunk = file.slice( start, end );
 			sendChunk( chunk, start, TOTAL_SIZE, function(){
@@ -76,8 +68,23 @@ function onFileSlice(data){
 		}
 	}
 
+	// @function sendChunk
+	// Async Simulation
 	function sendChunk(_chunk,_start,_total, _cb){
 		setTimeout(_cb, Math.random()*100+10);
+	}
+
+	// sync process
+	while( start < TOTAL_SIZE ){
+		
+		var chunk = file.slice( start, end );
+		
+		process( chunk, start, TOTAL_SIZE );
+
+		start = end;
+		end = start + CHUNK_SIZE;
+		// prevent bytes overflow
+		if (end > TOTAL_SIZE) { end = TOTAL_SIZE; }
 	}
 
 	self.postMessage({ 
@@ -106,6 +113,8 @@ function process( chunk, start, total ){
 
 }
 
+// @funtion onFileRead
+// Filereader function
 
 function onFileRead (data) { 
 	var file = data[0];

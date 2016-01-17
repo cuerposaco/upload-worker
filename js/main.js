@@ -31,27 +31,33 @@
 		}
 	}
 
+	// FileItem Class/function
 	function FileItem( _file, fileList ){
 
+		// FileItem Element
 		var li = document.createElement('li');
-		li.innerHTML = _file.name;
+		li.innerHTML = _file.name + ' (' + getReadableFileSizeString( _file.size ) + ')';
 
+		// progress Element
 		var progressEl = document.createElement('div');
 		progressEl.className = 'progress';
 		progressEl.style.width = "0%";
 		
 		li.appendChild(progressEl); 
-		
+
+		// appendo to filelist <ul>
 		fileList.appendChild(li);
-		
+
+		// Create Worker for appened file
+		// And crete worker communication channel
 		var worker = new Worker('/js/worker/fileReader.js');
-		worker.addEventListener('message', onWorkerMessage.bind(worker) );
-		worker.addEventListener('error', onWorkerError.bind(worker) );
+		worker.addEventListener('message', onWorkerMessage );
+		worker.addEventListener('error', onWorkerError );
 		worker.postMessage({ type: 'file', data: _file })
 
 		function onWorkerError(err){
 			console.log(err);
-			this.terminate();
+			worker.terminate();
 		}
 
 		function onWorkerMessage(e){
@@ -83,5 +89,17 @@
 			"el" : li
 		};
 	}
+
+	function getReadableFileSizeString(fileSizeInBytes) {
+
+	    var i = -1;
+	    var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+	    do {
+	        fileSizeInBytes = fileSizeInBytes / 1024;
+	        i++;
+	    } while (fileSizeInBytes > 1024);
+
+	    return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+	};
 
 })();
