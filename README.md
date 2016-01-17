@@ -8,6 +8,6 @@ python -m SimpleHTTPServer
 
 # Bibliografía
 
-[http://www.html5rocks.com/es/tutorials/workers/basics/]
-[http://www.html5rocks.com/es/tutorials/file/dndfiles/]
-[http://creativejs.com/tutorials/advanced-uploading-techniques-part-1/]
+- http://www.html5rocks.com/es/tutorials/workers/basics/
+- http://www.html5rocks.com/es/tutorials/file/dndfiles/
+- http://creativejs.com/tutorials/advanced-uploading-techniques-part-1/
